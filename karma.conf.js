@@ -72,10 +72,31 @@ module.exports = function(config) {
         browser_version: '72.0',
         os: 'Windows',
         os_version: '10'
+      },
+      bs_iphoneX: {
+        base: 'BrowserStack',
+        device: 'iPhone X',
+        os: 'ios',
+        real_mobile: true,
+        os_version: '11.0'
+      },
+      bs_chrome_mac_big_sur: {
+        base: 'BrowserStack',
+        browser_version: 'latest',
+        os: 'OS X',
+        os_version: 'Big Sur',
+        browser: 'chrome',
+      },
+      bs_safari_mac_big_sur: {
+        base: 'BrowserStack',
+        browser_version: '14.0',
+        os: 'OS X',
+        os_version: 'Big Sur',
+        browser: 'safari',
       }
     },
 
-    browsers: ['bs_chrome_windows'],
+    browsers: ['bs_chrome_windows', 'bs_iphoneX', 'bs_chrome_mac_big_sur', 'bs_safari_mac_big_sur'],
     singleRun: true,
 
     // Concurrency level
