@@ -1,0 +1,75 @@
+version: 2.1
+
+commands:
+  seed_browserstack_env_var:
+    description: Uses $NPM_TOKEN to authenticate to registry.npmjs.org
+    steps:
+      - run:
+          name: "Setup BROWSERSTACK_USERNAME"
+          command: echo "export BROWSERSTACK_USERNAME=$BROWSERSTACK_USERNAME" >> $BASH_ENV
+      - run:
+          name: "Setup BROWSERSTACK_ACCESS_KEY"
+          command: echo "export BROWSERSTACK_ACCESS_KEY=$BROWSERSTACK_ACCESS_KEY" >> $BASH_ENV
+      - run:
+          name: "Setup BROWSERSTACK_LOCAL"
+          command: echo "export BROWSERSTACK_LOCAL=true" >> $BASH_ENV
+      - run:
+          name: ""
+          command: echo "export BROWSERSTACK_LOCAL_IDENTIFIER='browserStackCircleCi'"
+
+  get_and_unzip_browserstack:
+    steps:
+      - run:
+          name: "Download the browserstack binary file"
+          command: wget "https://www.browserstack.com/browserstack-local/BrowserStackLocal-linux-x64.zip"
+      - run:
+          name: "Unzip the BrowserStack Local binary file"
+          command: unzip BrowserStackLocal-linux-x64.zip
+      - run:
+          name: "Run the file with your access key"
+          command: ./BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --daemon start --local-identifier $BROWSERSTACK_LOCAL_IDENTIFIER
+
+  stop_browserstack:
+    steps:
+      - run:
+          name: "Stop ./BrowserStackLocal"
+          command: ./BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --daemon stop --local-identifier $BROWSERSTACK_LOCAL_IDENTIFIER
+
+job-defaults: &job-defaults
+  machine:
+      image: ubuntu-2004:202101-01
+
+jobs:
+  initialize-workspace:
+    <<: *job-defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies npm ci
+          command: npm ci --prefer-offline --no-audit
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+
+  browser-test:
+    <<: *job-defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - seed_browserstack_env_var
+      - get_and_unzip_browserstack
+      - run: npm run karma
+      - stop_browserstack
+
+workflows:
+  version: 2
+
+  build:
+    jobs:
+      - initialize-workspace:
+          context: development
+      - browser-test:
+          context: development
+          requires:
+            - initialize-workspace
