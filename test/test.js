@@ -1,5 +1,7 @@
-describe('helloWorld()', function(){
-    it('should return "Hello world"', function(){
-        expect(helloWorld()).to.be.equal('helloWorld');
-    });
+describe('Sample test', function() {
+  it('Condition is true', function() {
+    expect('AngularJS').toBe('AngularJS');
+  });
 });
+
+
