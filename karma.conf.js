@@ -60,8 +60,8 @@ module.exports = function(config) {
 
 
     browserStack: {
-      username: process.env.BROWSERSTACK_USERNAME,
-      accessKey: process.env.BROWSERSTACK_ACCESS_KEY
+      username: 'brianohalloran_WVeqXR',
+      accessKey: 'kyW1cK2DinUJzNUZ6jd3'
     },
 
     // define browsers
@@ -73,20 +73,6 @@ module.exports = function(config) {
         os: 'Windows',
         os_version: '10'
       },
-      bs_iphoneX: {
-        base: 'BrowserStack',
-        device: 'iPhone X',
-        os: 'ios',
-        real_mobile: true,
-        os_version: '11.0'
-      },
-      bs_chrome_mac_big_sur: {
-        base: 'BrowserStack',
-        browser_version: 'latest',
-        os: 'OS X',
-        os_version: 'Big Sur',
-        browser: 'chrome',
-      },
       bs_safari_mac_big_sur: {
         base: 'BrowserStack',
         browser_version: '14.0',
@@ -96,7 +82,7 @@ module.exports = function(config) {
       }
     },
 
-    browsers: ['bs_chrome_windows', 'bs_iphoneX', 'bs_chrome_mac_big_sur', 'bs_safari_mac_big_sur'],
+    browsers: ['bs_chrome_windows'],
     singleRun: true,
 
     // Concurrency level
